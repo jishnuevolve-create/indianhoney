@@ -134,13 +134,13 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:22px">
       <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
         <div class="reveal lift" style="background:#FFFFFF;border:1px solid #F0E3C2;border-radius:22px;overflow:hidden;display:flex;flex-direction:column" style-hover="box-shadow:0 22px 46px -26px rgba(139,94,0,.5);border-color:#FFC527;transform:translateY(-6px)">
-          <div style="position:relative;background:#FFF4D0;padding:22px;display:grid;place-items:center;aspect-ratio:1/.86;overflow:hidden">
+          <a href="Product.dc.html?id={{ p.id }}" style="position:relative;background:#FFF4D0;padding:22px;display:grid;place-items:center;aspect-ratio:1/.86;overflow:hidden;color:inherit">
             <img src="{{ p.img }}" alt="{{ p.name }}" style="max-height:100%;width:auto;object-fit:contain;mix-blend-mode:multiply" style-hover="transform:scale(1.08)" />
             <span style="position:absolute;top:14px;left:14px;background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;padding:6px 11px;border-radius:999px">{{ p.tag }}</span>
-          </div>
+          </a>
           <div style="padding:20px;display:flex;flex-direction:column;gap:10px;flex:1">
             <div style="font-size:12px;color:#B26B00;letter-spacing:.1em;text-transform:uppercase">{{ p.cat }}</div>
-            <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;line-height:1.35;margin:0">{{ p.name }}</h3>
+            <a href="Product.dc.html?id={{ p.id }}" style="color:#2B1B07"><h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;line-height:1.35;margin:0">{{ p.name }}</h3></a>
             <div style="color:#E0A000;font-size:13px;letter-spacing:.12em">★★★★★</div>
             <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:8px">
               <span style="font-family:'Outfit',sans-serif;font-weight:900;font-size:20px">{{ p.price }}</span>
