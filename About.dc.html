@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Outfit:wght@400;600;700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font-family: 'DM Sans', system-ui, sans-serif; color: #2B1B07; background: #FFFDF6; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  a { color: #B26B00; text-decoration: none; transition: color .25s ease; }
+  a:hover { color: #2B1B07; }
+  button { transition: background .25s ease, color .25s ease, transform .15s ease, box-shadow .25s ease, border-color .25s ease; }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.is-in { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-46px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal-left.is-in { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(46px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal-right.is-in { opacity: 1; transform: translateX(0); }
+  .lift { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .3s ease; }
+  .menu-toggle { display: none; }
+  @media (max-width: 760px) {
+    .menu-toggle { display: inline-flex !important; }
+    .header-logo-text { display: none !important; }
+    nav.nav-links { display: none !important; }
+    nav.nav-links.open { display: flex !important; position: absolute; top: 70px; left: 14px; right: 14px; flex-direction: column; align-items: flex-start; gap: 4px; background: #FFFDF6; padding: 18px 22px; border-radius: 20px; box-shadow: 0 24px 50px -20px rgba(80,52,0,.45); z-index: 40; }
+    nav.nav-links.open a { padding: 8px 0; width: 100%; font-size: 16px; }
+  }
+</style>
+</helmet>
+
+<div style="max-width:100%;overflow-x:clip">
+
+  <header style="position:sticky;top:14px;z-index:30;margin:14px auto -92px;max-width:1240px;width:calc(100% - 32px);border-radius:999px;padding:12px 26px;display:flex;align-items:center;gap:18px;flex-wrap:nowrap;transition:background .3s ease, box-shadow .3s ease;background:{{ headerBg }};box-shadow:{{ headerShadow }};backdrop-filter:blur(10px)">
+    <a href="Indian Honey Park.dc.html" style="display:flex;align-items:center;gap:10px;color:#2B1B07;flex:0 0 auto;min-width:0">
+      <img src="uploads/indianhoney.webp" alt="Indian Honey Park" style="height:52px;width:auto;flex:0 0 auto" style-hover="transform:scale(1.08) rotate(-6deg)" />
+      <span class="header-logo-text" style="font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;line-height:1.05;white-space:nowrap">Indian Honey Park<span style="display:block;font-family:'DM Sans',sans-serif;font-weight:400;font-size:10px;letter-spacing:.22em;color:#9A7B3A;text-transform:uppercase">Kerala · since 1990</span></span>
+    </a>
+    <nav class="nav-links {{ menuOpenClass }}" style="display:flex;gap:20px;flex-wrap:nowrap;min-width:0;font-weight:500;font-size:14px;margin-left:auto">
+      <a href="Indian Honey Park.dc.html" onClick="{{ closeMenu }}" style="color:#2B1B07">Home</a>
+      <a href="Shop.dc.html" onClick="{{ closeMenu }}" style="color:#2B1B07">Shop</a>
+      <a href="About.dc.html" onClick="{{ closeMenu }}" style="color:#2B1B07;font-weight:700;border-bottom:2px solid #2B1B07">About Us</a>
+      <a href="Contact.dc.html" onClick="{{ closeMenu }}" style="color:#2B1B07">Contact</a>
+    </nav>
+    <button type="button" class="menu-toggle" onClick="{{ toggleMenu }}" aria-label="Menu" style="margin-left:auto;background:none;border:0;font-size:22px;line-height:1;color:#2B1B07;cursor:pointer;padding:6px 4px;flex:0 0 auto">{{ menuIcon }}</button>
+    <a href="Shop.dc.html" style="background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;padding:11px 20px;border-radius:999px;white-space:nowrap;flex:0 0 auto" style-hover="background:#43290B" style-active="transform:scale(.94)">Shop now</a>
+  </header>
+
+  <section style="background:#FFC527;padding:130px 24px 60px">
+    <div style="max-width:900px;margin:0 auto;text-align:center">
+      <p style="font-family:'Yellowtail',cursive;font-size:30px;color:#8A5A00;margin:0">About us</p>
+      <h1 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(34px,5vw,56px);line-height:1.02;margin:2px 0 16px;letter-spacing:-.02em;text-wrap:balance">Three decades of honest honey from Kerala</h1>
+      <p style="font-size:18px;line-height:1.65;margin:0;color:#4A3208;text-wrap:pretty">Indian Honey Park began in 1990 with a handful of hives and a simple rule we still follow: bottle the honey exactly as the bees made it.</p>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:76px 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;align-items:center">
+    <div class="reveal-left" style="border-radius:26px;overflow:hidden;background:#FFF4D0">
+      <img src="https://www.indianhoneypark.com/web/image/1229-073ef0ec/Garlic%20In%20Honey.webp" alt="Garlic in honey" style="width:100%;height:100%;object-fit:cover" style-hover="transform:scale(1.05)" />
+    </div>
+    <div class="reveal-right">
+      <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#B26B00;margin:0">Our story</p>
+      <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(26px,3.4vw,38px);line-height:1.06;margin:2px 0 18px;letter-spacing:-.01em">From family apiary to India's kitchens</h2>
+      <p style="font-size:17px;line-height:1.65;color:#4A3208;margin:0 0 16px;text-wrap:pretty">What started as a small beekeeping unit in Kerala now works with more than 300 partner beekeepers across the Western Ghats, Kashmir and the Nilgiris. We buy directly, pay above market rate, and never blend batches to hit a price point.</p>
+      <p style="font-size:17px;line-height:1.65;color:#4A3208;margin:0">Our fruits-in-honey range came out of a home experiment — whole rambutan resting in a jar of wild honey. It is now what most customers come back for.</p>
+    </div>
+  </section>
+
+  <section style="background:#FFFDF6;border-top:1px solid #F0E3C2;border-bottom:1px solid #F0E3C2;padding:56px 24px">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:26px;text-align:center">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div class="reveal">
+          <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(30px,4vw,44px);line-height:1;color:#2B1B07">{{ s.n }}</div>
+          <div style="font-size:14px;color:#6B4B12;margin-top:8px;letter-spacing:.04em">{{ s.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="max-width:1180px;margin:0 auto;padding:76px 24px">
+    <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#B26B00;text-align:center;margin:0">How it's made</p>
+    <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(28px,4vw,42px);text-align:center;margin:2px 0 44px">From hive to jar in four steps</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="4">
+        <div class="reveal lift" style="background:#FFF4D0;border-radius:22px;padding:30px" style-hover="transform:translateY(-6px);box-shadow:0 20px 44px -26px rgba(139,94,0,.4);background:#FFEBB0">
+          <div style="font-family:'Outfit',sans-serif;font-weight:900;font-size:14px;letter-spacing:.14em;color:#B26B00;margin-bottom:12px">STEP {{ st.no }}</div>
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:19px;margin:0 0 8px">{{ st.title }}</h3>
+          <p style="margin:0;font-size:14px;line-height:1.65;color:#4A3208">{{ st.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="background:#FFC527;padding:70px 24px">
+    <div style="max-width:1080px;margin:0 auto">
+      <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#8A5A00;text-align:center;margin:0">What we promise</p>
+      <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(28px,4vw,42px);text-align:center;margin:2px 0 42px">Purity you can check</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px">
+        <sc-for list="{{ promises }}" as="pr" hint-placeholder-count="4">
+          <div class="reveal lift" style="background:rgba(255,253,246,.8);border-radius:20px;padding:26px" style-hover="background:#FFFDF6;transform:translateY(-6px);box-shadow:0 20px 44px -26px rgba(139,94,0,.35)">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;margin:0 0 8px">{{ pr.title }}</h3>
+            <p style="margin:0;font-size:14px;line-height:1.65;color:#4A3208">{{ pr.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section class="reveal" style="max-width:1000px;margin:0 auto;padding:76px 24px;text-align:center">
+    <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(26px,3.6vw,40px);line-height:1.08;margin:0 0 14px;text-wrap:balance">Taste the difference a real harvest makes</h2>
+    <p style="font-size:17px;line-height:1.6;color:#4A3208;margin:0 auto 28px;max-width:52ch">Start with the 1 kg Indian Honey, or try a fruits-in-honey jar if you are buying a gift.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="Shop.dc.html" style="background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;padding:17px 32px;border-radius:999px" style-hover="background:#43290B" style-active="transform:scale(.96)">Browse products</a>
+      <a href="Contact.dc.html" style="border:2px solid #2B1B07;color:#2B1B07;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px" style-hover="background:rgba(43,27,7,.08)" style-active="transform:scale(.96)">Talk to us</a>
+    </div>
+  </section>
+
+  <footer style="background:#2B1B07;color:#F3E6C8;padding:56px 24px 26px">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:34px">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <img src="uploads/indianhoney.webp" alt="Indian Honey Park" style="height:44px;width:auto" />
+          <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;color:#FFFDF6">Indian Honey Park</span>
+        </div>
+        <p style="margin:0;font-size:14px;line-height:1.7;color:#C9B489">Raw honey and fruits-in-honey, sourced direct from Indian beekeepers.</p>
+      </div>
+      <div>
+        <h4 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#FFC527;margin:0 0 14px">Pages</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:9px;font-size:14px">
+          <li><a href="Indian Honey Park.dc.html" style="color:#F3E6C8">Home</a></li>
+          <li><a href="Shop.dc.html" style="color:#F3E6C8">Shop</a></li>
+          <li><a href="About.dc.html" style="color:#F3E6C8">About Us</a></li>
+          <li><a href="Contact.dc.html" style="color:#F3E6C8">Contact</a></li>
+          <li><a href="Cart.dc.html" style="color:#F3E6C8">Cart</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#FFC527;margin:0 0 14px">Policies</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:9px;font-size:14px">
+          <li><a href="https://www.indianhoneypark.com/cancellation-and-refund-policy" style="color:#F3E6C8">Cancellation &amp; Refund</a></li>
+          <li><a href="https://www.indianhoneypark.com/shipping-and-delivery-policy" style="color:#F3E6C8">Shipping &amp; Delivery</a></li>
+          <li><a href="https://www.indianhoneypark.com/terms-and-conditions" style="color:#F3E6C8">Terms &amp; Conditions</a></li>
+          <li><a href="https://www.indianhoneypark.com/privacy-policy" style="color:#F3E6C8">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#FFC527;margin:0 0 14px">Contact</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:9px;font-size:14px">
+          <li><a href="tel:+919400222600" style="color:#F3E6C8">+91 9400 222 600</a></li>
+          <li><a href="mailto:indianhoneypark90@gmail.com" style="color:#F3E6C8">indianhoneypark90@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="max-width:1180px;margin:38px auto 0;padding-top:18px;border-top:1px solid rgba(255,197,39,.25);font-size:13px;color:#9C8558">Copyright © Indian Honey Park</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { scrolled: false, menuOpen: false };
+  componentDidMount() {
+    this._onScroll = () => {
+      const s = window.scrollY > 60;
+      if (s !== this.state.scrolled) this.setState({ scrolled: s });
+    };
+    window.addEventListener("scroll", this._onScroll, { passive: true });
+    this._onScroll();
+    requestAnimationFrame(() => this._initReveal());
+  }
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this._onScroll);
+    if (this._revealObserver) this._revealObserver.disconnect();
+  }
+  _initReveal() {
+    if (this._revealObserver) this._revealObserver.disconnect();
+    this._revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        const parent = el.parentElement;
+        const group = parent ? Array.from(parent.children).filter((c) => c.classList.contains("reveal") || c.classList.contains("reveal-left") || c.classList.contains("reveal-right")) : [el];
+        const idx = Math.max(0, group.indexOf(el));
+        el.style.transitionDelay = Math.min(idx, 8) * 70 + "ms";
+        el.classList.add("is-in");
+        this._revealObserver.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
+    document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach((el) => this._revealObserver.observe(el));
+  }
+  renderVals() {
+    return {
+      menuOpenClass: this.state.menuOpen ? "open" : "",
+      menuIcon: this.state.menuOpen ? "✕" : "☰",
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      headerBg: this.state.scrolled ? "rgba(255,253,246,.92)" : "rgba(255,253,246,.14)",
+      headerShadow: this.state.scrolled ? "0 14px 40px -20px rgba(80,52,0,.5)" : "none",
+      stats: [
+        { n: "1990", label: "Year we started" },
+        { n: "300+", label: "Partner beekeepers" },
+        { n: "14+", label: "Honey varieties" },
+        { n: "4.8★", label: "Average rating" }
+      ],
+      steps: [
+        { no: "01", title: "Hive to harvest", body: "Frames are taken only when fully capped, so moisture stays low and the honey keeps naturally." },
+        { no: "02", title: "Cold extraction", body: "Spun at ambient temperature. No heating, so enzymes, pollen and aroma survive intact." },
+        { no: "03", title: "Coarse straining", body: "Wax and debris are strained out — we stop there. No ultra-filtration, no clarifying agents." },
+        { no: "04", title: "Batch testing", body: "Each lot is tested for purity, moisture and residue before it is bottled in glass and sealed." }
+      ],
+      promises: [
+        { title: "No added sugar or syrup", body: "Nothing goes in the jar except honey and, in our fruit range, real fruit." },
+        { title: "Traceable to the apiary", body: "Every batch code maps back to the beekeeper and the region it came from." },
+        { title: "Fair prices to beekeepers", body: "Direct purchase, no middlemen, paid above prevailing market rate." },
+        { title: "Glass, not plastic", body: "Tamper-proof glass jars that protect flavour and travel safely across India." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

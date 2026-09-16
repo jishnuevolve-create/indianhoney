@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Outfit:wght@400;600;700;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font-family: 'DM Sans', system-ui, sans-serif; color: #2B1B07; background: #FFFDF6; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  a { color: #B26B00; text-decoration: none; transition: color .25s ease; }
+  a:hover { color: #2B1B07; }
+  button { transition: background .25s ease, color .25s ease, transform .15s ease, box-shadow .25s ease, border-color .25s ease; }
+  @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes cartBump { 0% { transform: scale(1); } 35% { transform: scale(1.22) rotate(-4deg); } 65% { transform: scale(.94) rotate(3deg); } 100% { transform: scale(1) rotate(0); } }
+  .bump { animation: cartBump .5s cubic-bezier(.34,1.56,.64,1); }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.is-in { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-46px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal-left.is-in { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(46px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal-right.is-in { opacity: 1; transform: translateX(0); }
+  .lift { transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .3s ease; }
+  .jar-pop { opacity: 0; transform: scale(.72) translateY(60px) rotate(-4deg); transition: opacity 1.1s cubic-bezier(.22,1,.36,1), transform 1.2s cubic-bezier(.22,1,.36,1); animation: jarFloat 6s ease-in-out infinite; animation-play-state: paused; }
+  .jar-pop.is-in { opacity: 1; transform: scale(1) translateY(0) rotate(0); animation-play-state: running; }
+  @keyframes jarFloat { 0%,100% { margin-top: 0; } 50% { margin-top: -14px; } }
+  .menu-toggle { display: none; }
+  @media (max-width: 760px) {
+    .menu-toggle { display: inline-flex !important; }
+    .header-logo-text { display: none !important; }
+    nav.nav-links { display: none !important; }
+    nav.nav-links.open { display: flex !important; position: absolute; top: 70px; left: 14px; right: 14px; flex-direction: column; align-items: flex-start; gap: 4px; background: #FFFDF6; padding: 18px 22px; border-radius: 20px; box-shadow: 0 24px 50px -20px rgba(80,52,0,.45); z-index: 40; }
+    nav.nav-links.open a { padding: 8px 0; width: 100%; font-size: 16px; }
+  }
+</style>
+</helmet>
+
+<div style="max-width:100%;overflow-x:clip">
+
+  <header style="position:sticky;top:14px;z-index:30;margin:14px auto -92px;max-width:1240px;width:calc(100% - 32px);border-radius:999px;padding:12px 26px;display:flex;align-items:center;gap:18px;flex-wrap:nowrap;transition:background .3s ease, box-shadow .3s ease, backdrop-filter .3s ease;background:{{ headerBg }};box-shadow:{{ headerShadow }};backdrop-filter:blur(10px)">
+    <a href="#top" style="display:flex;align-items:center;gap:10px;color:#2B1B07;flex:0 0 auto;min-width:0">
+      <img src="uploads/indianhoney.webp" alt="Indian Honey Park" style="height:52px;width:auto;flex:0 0 auto" style-hover="transform:scale(1.08) rotate(-6deg)" />
+      <span class="header-logo-text" style="font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;line-height:1.05;white-space:nowrap">Indian Honey Park<span style="display:block;font-family:'DM Sans',sans-serif;font-weight:400;font-size:10px;letter-spacing:.22em;color:#9A7B3A;text-transform:uppercase">Kerala · since 1990</span></span>
+    </a>
+    <nav class="nav-links {{ menuOpenClass }}" style="display:flex;gap:20px;flex-wrap:nowrap;min-width:0;font-weight:500;font-size:14px;margin-left:auto">
+      <a href="#top" onClick="{{ closeMenu }}" style="color:#2B1B07">Home</a>
+      <a href="Shop.dc.html" onClick="{{ closeMenu }}" style="color:#2B1B07">Shop</a>
+      <a href="About.dc.html" onClick="{{ closeMenu }}" style="color:#2B1B07">About Us</a>
+      <a href="Contact.dc.html" onClick="{{ closeMenu }}" style="color:#2B1B07">Contact</a>
+    </nav>
+    <button type="button" class="menu-toggle" onClick="{{ toggleMenu }}" aria-label="Menu" style="margin-left:auto;background:none;border:0;font-size:22px;line-height:1;color:#2B1B07;cursor:pointer;padding:6px 4px;flex:0 0 auto">{{ menuIcon }}</button>
+    <a href="Cart.dc.html" data-cart-badge style="background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;padding:11px 20px;border-radius:999px;white-space:nowrap;flex:0 0 auto;transition:background .25s ease,transform .15s ease" style-hover="background:#43290B" style-active="transform:scale(.94)">Cart · {{ cartCount }}</a>
+  </header>
+
+  <section id="top" style="position:relative;background:#FFC527;padding:130px 24px 28px;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 82% 30%, rgba(255,255,255,.45), transparent 45%);pointer-events:none"></div>
+
+      <div style="position:relative;flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(12px,4vw,32px);align-items:center;max-width:1180px;margin:0 auto;width:100%">
+        <div class="reveal-left" style="text-align:center;order:1">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(43,27,7,.08);border:1px solid rgba(43,27,7,.15);border-radius:999px;padding:6px 14px;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:.06em;color:#2B1B07;margin-bottom:14px">★ 4.8 RATED · 300+ BEEKEEPERS</span>
+          <h1 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(38px,8vw,74px);line-height:.96;letter-spacing:-.02em;margin:0;color:#2B1B07;text-wrap:balance">Immunity<br />in a Jar</h1>
+        </div>
+
+        <div style="position:relative;min-height:clamp(240px,50vw,320px);display:grid;place-items:center;order:2">
+          <div style="position:absolute;width:78%;aspect-ratio:1;border-radius:50%;background:rgba(255,255,255,.4)"></div>
+          <img id="heroJarImg" class="jar-pop" src="uploads/HERO JAR.png" alt="Indian Honey — 500g jar" style="position:relative;width:100%;max-width:380px" />
+        </div>
+
+        <div class="reveal-right" style="text-align:center;order:3">
+          <p style="font-family:'Yellowtail',cursive;font-size:clamp(22px,4vw,28px);color:#8A5A00;margin:0 0 10px">Sweetness crafted by bees</p>
+          <p style="font-size:15px;line-height:1.7;max-width:32ch;margin:0 auto;color:#4A3208">Raw, unpasteurised honey from Kerala's forests and farms — plus our signature fruits-in-honey jars, bottled with care.</p>
+          <a href="#about" style="margin-top:16px;display:inline-block;font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;color:#2B1B07;text-decoration:underline">Read more</a>
+        </div>
+      </div>
+  </section>
+
+  <section style="padding:44px 24px;max-width:1180px;margin:0 auto;text-align:center">
+    <div class="reveal" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center">
+      <a href="#shop" style="background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;padding:17px 34px;border-radius:999px;letter-spacing:.03em;transition:background .25s ease,transform .15s ease,box-shadow .25s ease" style-hover="background:#43290B;box-shadow:0 14px 30px -14px rgba(43,27,7,.5)" style-active="transform:scale(.95)">ORDER NOW</a>
+      <a href="#about" style="border:2px solid #2B1B07;color:#2B1B07;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;padding:15px 30px;border-radius:999px;transition:background .25s ease,color .25s ease,transform .15s ease" style-hover="background:#2B1B07;color:#FFC527" style-active="transform:scale(.95)">Our story</a>
+    </div>
+    <div class="reveal" style="display:flex;gap:40px;margin-top:34px;flex-wrap:wrap;justify-content:center;transition-delay:.1s">
+      <div data-count-to="14" data-count-suffix="+"><div class="count-num" style="font-family:'Outfit',sans-serif;font-weight:900;font-size:26px">0+</div><div style="font-size:13px;color:#6B4B12">honey varieties</div></div>
+      <div data-count-to="300" data-count-suffix="+"><div class="count-num" style="font-family:'Outfit',sans-serif;font-weight:900;font-size:26px">0+</div><div style="font-size:13px;color:#6B4B12">partner beekeepers</div></div>
+      <div data-count-to="4.8" data-count-suffix="★" data-count-decimals="1"><div class="count-num" style="font-family:'Outfit',sans-serif;font-weight:900;font-size:26px">0★</div><div style="font-size:13px;color:#6B4B12">customer rating</div></div>
+    </div>
+  </section>
+
+  <section id="categories" style="padding:78px 24px;max-width:1180px;margin:0 auto">
+    <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#B26B00;text-align:center;margin:0">Best feature</p>
+    <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(28px,4vw,44px);text-align:center;margin:2px 0 46px;letter-spacing:-.01em">We Provide The Best Quality</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px">
+      <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="4">
+        <a href="#shop" class="reveal lift" style="background:#FFFFFF;border:1px solid #F0E3C2;border-radius:22px;padding:32px 26px;text-align:center;display:block;color:#2B1B07" style-hover="border-color:#FFC527;box-shadow:0 18px 40px -22px rgba(139,94,0,.45);transform:translateY(-6px)" style-active="transform:translateY(-2px) scale(.98)">
+          <span style="width:64px;height:64px;border-radius:50%;background:#FFF4D0;display:grid;place-items:center;margin:0 auto 18px;font-size:28px;font-family:'Outfit',sans-serif;font-weight:900;color:#B26B00">{{ cat.mark }}</span>
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:19px;margin:0 0 8px">{{ cat.name }}</h3>
+          <p style="font-size:14px;line-height:1.6;color:#6B4B12;margin:0">{{ cat.blurb }}</p>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <sc-if value="{{ showPromos }}" hint-placeholder-val="{{ true }}">
+    <section style="padding:0 24px 78px;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:22px">
+      <div class="reveal lift" style="background:#FFC527;border-radius:26px;padding:38px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;overflow:hidden" style-hover="box-shadow:0 24px 50px -26px rgba(139,94,0,.5);transform:translateY(-5px)">
+        <div style="flex:1 1 160px">
+          <p style="font-family:'Yellowtail',cursive;font-size:24px;color:#8A5A00;margin:0 0 4px">100% natural</p>
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:30px;line-height:1.05;margin:0 0 18px">Festive Combo<br />Save 20%</h3>
+          <a href="#shop" style="background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:800;font-size:14px;padding:13px 24px;border-radius:999px;display:inline-block" style-hover="background:#43290B" style-active="transform:scale(.95)">SHOP NOW</a>
+        </div>
+        <img src="https://www.indianhoneypark.com/web/image/product.product/11/image_1024" alt="Wild forest honey" style="width:140px;border-radius:16px" style-hover="transform:scale(1.08) rotate(-3deg)" />
+      </div>
+      <div class="reveal lift" style="background:#2B1B07;border-radius:26px;padding:38px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;overflow:hidden" style-hover="box-shadow:0 24px 50px -26px rgba(0,0,0,.5);transform:translateY(-5px)">
+        <div style="flex:1 1 160px">
+          <p style="font-family:'Yellowtail',cursive;font-size:24px;color:#FFC527;margin:0 0 4px">Delight taste</p>
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:30px;line-height:1.05;margin:0 0 18px;color:#FFFDF6">Fruits in Honey<br />From ₹200</h3>
+          <a href="#shop" style="background:#FFC527;color:#2B1B07;font-family:'Outfit',sans-serif;font-weight:800;font-size:14px;padding:13px 24px;border-radius:999px;display:inline-block" style-hover="background:#FFFDF6" style-active="transform:scale(.95)">SHOP NOW</a>
+        </div>
+        <img src="https://www.indianhoneypark.com/web/image/product.product/16/image_1024" alt="Kiwi in honey" style="width:140px;border-radius:16px" style-hover="transform:scale(1.08) rotate(3deg)" />
+      </div>
+    </section>
+  </sc-if>
+
+  <section id="shop" style="padding:0 24px 80px;max-width:1180px;margin:0 auto">
+    <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#B26B00;text-align:center;margin:0">New arrivals</p>
+    <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(28px,4vw,44px);text-align:center;margin:2px 0 46px;letter-spacing:-.01em">Latest Products</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:22px">
+      <sc-for list="{{ products }}" as="p" hint-placeholder-count="8">
+        <div class="reveal lift" style="background:#FFFFFF;border:1px solid #F0E3C2;border-radius:22px;overflow:hidden;display:flex;flex-direction:column" style-hover="box-shadow:0 22px 46px -26px rgba(139,94,0,.5);border-color:#FFC527;transform:translateY(-6px)">
+          <div style="position:relative;background:#FFF4D0;padding:22px;display:grid;place-items:center;aspect-ratio:1/.86;overflow:hidden">
+            <img src="{{ p.img }}" alt="{{ p.name }}" style="max-height:100%;width:auto;object-fit:contain;mix-blend-mode:multiply" style-hover="transform:scale(1.08)" />
+            <span style="position:absolute;top:14px;left:14px;background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:.08em;padding:6px 11px;border-radius:999px">{{ p.tag }}</span>
+          </div>
+          <div style="padding:20px;display:flex;flex-direction:column;gap:10px;flex:1">
+            <div style="font-size:12px;color:#B26B00;letter-spacing:.1em;text-transform:uppercase">{{ p.cat }}</div>
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;line-height:1.35;margin:0">{{ p.name }}</h3>
+            <div style="color:#E0A000;font-size:13px;letter-spacing:.12em">★★★★★</div>
+            <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:8px">
+              <span style="font-family:'Outfit',sans-serif;font-weight:900;font-size:20px">{{ p.price }}</span>
+              <button type="button" onClick="{{ addToCart }}" data-id="{{ p.id }}" style="background:#FFC527;border:0;color:#2B1B07;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:.06em;padding:11px 15px;border-radius:999px;cursor:pointer" style-hover="background:#2B1B07;color:#FFC527" style-active="transform:scale(.92)">ADD TO CART</button>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="background:#FFC527;padding:70px 24px 78px;position:relative">
+    <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#8A5A00;text-align:center;margin:0">Why choose us</p>
+    <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(28px,4vw,44px);text-align:center;margin:2px 0 50px">Why Choose Our Products</h2>
+    <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:28px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="reveal lift" style="background:rgba(255,253,246,.75);border-radius:20px;padding:24px" style-hover="background:#FFFDF6;transform:translateX(6px);box-shadow:0 16px 36px -24px rgba(80,52,0,.4)">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;margin:0 0 6px">Single-origin sourcing</h3>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#4A3208">Every batch is traced back to the apiary it came from — Kashmir, the Western Ghats, or our own farms.</p>
+        </div>
+        <div class="reveal lift" style="background:rgba(255,253,246,.75);border-radius:20px;padding:24px" style-hover="background:#FFFDF6;transform:translateX(6px);box-shadow:0 16px 36px -24px rgba(80,52,0,.4)">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;margin:0 0 6px">Cold-extracted, never heated</h3>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#4A3208">Enzymes and pollen stay intact because we never pasteurise or filter the goodness out.</p>
+        </div>
+      </div>
+      <div class="reveal" style="display:grid;place-items:center;min-height:260px">
+        <img src="https://www.indianhoneypark.com/web/image/1697-5a8edd87/Untitled%20design%2812%29.png" alt="Fruits in honey jar" style="width:100%;max-width:340px;animation:floatY 6s ease-in-out infinite" />
+      </div>
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div class="reveal lift" style="background:rgba(255,253,246,.75);border-radius:20px;padding:24px" style-hover="background:#FFFDF6;transform:translateX(-6px);box-shadow:0 16px 36px -24px rgba(80,52,0,.4)">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;margin:0 0 6px">Real fruit inside</h3>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#4A3208">Kiwi, plum, amla, rambutan and pomelo, preserved whole in honey — no syrups, no colours.</p>
+        </div>
+        <div class="reveal lift" style="background:rgba(255,253,246,.75);border-radius:20px;padding:24px" style-hover="background:#FFFDF6;transform:translateX(-6px);box-shadow:0 16px 36px -24px rgba(80,52,0,.4)">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;margin:0 0 6px">Lab tested every batch</h3>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#4A3208">Purity, moisture and antibiotic residue reports for each lot, available on request.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" style="padding:80px 24px;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;align-items:center">
+    <div class="reveal-left" style="border-radius:26px;overflow:hidden;background:#FFF4D0">
+      <img src="https://www.indianhoneypark.com/web/image/1229-073ef0ec/Garlic%20In%20Honey.webp" alt="Garlic in honey" style="width:100%;height:100%;object-fit:cover" style-hover="transform:scale(1.05)" />
+    </div>
+    <div class="reveal-right">
+      <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#B26B00;margin:0">About us</p>
+      <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(28px,3.6vw,42px);line-height:1.05;margin:2px 0 18px;letter-spacing:-.01em;text-wrap:balance">Experience nature's sweetest harmony with our Fruits in Honey</h2>
+      <p style="font-size:17px;line-height:1.65;color:#4A3208;margin:0 0 18px;text-wrap:pretty">Each jar captures the perfect balance of natural sweetness, rich aroma and wholesome nutrition. We work directly with beekeeping families across India, pay them fairly, and bottle in small batches so nothing sits on a shelf losing its character.</p>
+      <ul style="list-style:none;padding:0;margin:0 0 28px;display:grid;gap:10px;font-size:15px;color:#2B1B07">
+        <li style="display:flex;gap:10px;align-items:flex-start"><span style="color:#B26B00;font-weight:700">●</span>Honey's sweetness with garlic's healing power</li>
+        <li style="display:flex;gap:10px;align-items:flex-start"><span style="color:#B26B00;font-weight:700">●</span>Cheruthen (stingless bee honey) in limited runs</li>
+        <li style="display:flex;gap:10px;align-items:flex-start"><span style="color:#B26B00;font-weight:700">●</span>Shipped across India in tamper-proof glass</li>
+      </ul>
+      <a href="#contact" style="background:#2B1B07;color:#FFC527;font-family:'Outfit',sans-serif;font-weight:800;font-size:15px;padding:16px 30px;border-radius:999px;display:inline-block" style-hover="background:#43290B" style-active="transform:scale(.96)">Learn more</a>
+    </div>
+  </section>
+
+  <section style="background:#FFFDF6;border-top:1px solid #F0E3C2;padding:74px 24px">
+    <div style="max-width:1180px;margin:0 auto">
+      <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#B26B00;text-align:center;margin:0">Our reviews</p>
+      <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(28px,4vw,44px);text-align:center;margin:2px 0 44px">Our Client's Feedback</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px">
+        <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+          <figure class="reveal lift" style="margin:0;background:#FFF4D0;border-radius:22px;padding:30px" style-hover="transform:translateY(-6px);box-shadow:0 20px 44px -26px rgba(139,94,0,.4)">
+            <div style="color:#E0A000;font-size:14px;letter-spacing:.14em;margin-bottom:14px">★★★★★</div>
+            <blockquote style="margin:0 0 20px;font-size:16px;line-height:1.65;color:#2B1B07">{{ r.quote }}</blockquote>
+            <figcaption style="display:flex;align-items:center;gap:12px">
+              <span style="width:42px;height:42px;border-radius:50%;background:#FFC527;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;color:#2B1B07">{{ r.initial }}</span>
+              <span><span style="display:block;font-family:'Outfit',sans-serif;font-weight:700;font-size:15px">{{ r.name }}</span><span style="display:block;font-size:13px;color:#6B4B12">{{ r.city }}</span></span>
+            </figcaption>
+          </figure>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="background:#FFC527;padding:66px 24px">
+    <div style="max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:34px;align-items:center">
+      <div class="reveal-left">
+        <p style="font-family:'Yellowtail',cursive;font-size:28px;color:#8A5A00;margin:0">How can we help?</p>
+        <h2 style="font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(26px,3.4vw,38px);line-height:1.08;margin:2px 0 16px">Order by phone or drop us a line</h2>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:17px">
+          <a href="tel:+919400222600" style="font-family:'Outfit',sans-serif;font-weight:800;font-size:24px;color:#2B1B07">+91 9400 222 600</a>
+          <a href="mailto:indianhoneypark90@gmail.com" style="color:#4A3208">indianhoneypark90@gmail.com</a>
+        </div>
+      </div>
+      <div class="reveal-right lift" style="background:#FFFDF6;border-radius:24px;padding:30px" style-hover="box-shadow:0 24px 50px -28px rgba(80,52,0,.35)">
+        <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;margin:0 0 8px">Subscribe to our newsletter</h3>
+        <p style="margin:0 0 18px;font-size:14px;color:#6B4B12">Harvest news, new flavours and subscriber-only combos.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input type="email" placeholder="you@email.com" style="flex:1 1 160px;border:1px solid #E4D3A8;border-radius:999px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:15px;background:#FFFFFF;color:#2B1B07;transition:border-color .25s ease,box-shadow .25s ease" style-focus="border-color:#FFC527;box-shadow:0 0 0 4px rgba(255,197,39,.3)" />
+          <button type="button" style="background:#2B1B07;color:#FFC527;border:0;font-family:'Outfit',sans-serif;font-weight:800;font-size:14px;padding:14px 24px;border-radius:999px;cursor:pointer" style-hover="background:#43290B" style-active="transform:scale(.95)">SUBSCRIBE</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer style="background:#2B1B07;color:#F3E6C8;padding:56px 24px 26px">
+    <div style="max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:34px">
+      <div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+          <img src="uploads/indianhoney.webp" alt="Indian Honey Park" style="height:44px;width:auto" />
+          <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;color:#FFFDF6">Indian Honey Park</span>
+        </div>
+        <p style="margin:0;font-size:14px;line-height:1.7;color:#C9B489">Raw honey and fruits-in-honey, sourced direct from Indian beekeepers.</p>
+      </div>
+      <div>
+        <h4 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#FFC527;margin:0 0 14px">Shop</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:9px;font-size:14px">
+          <li><a href="#shop" style="color:#F3E6C8">Natural Honey</a></li>
+          <li><a href="#shop" style="color:#F3E6C8">Fruits in Honey</a></li>
+          <li><a href="#shop" style="color:#F3E6C8">Flavored Honey</a></li>
+          <li><a href="#shop" style="color:#F3E6C8">Cheruthen</a></li>
+          <li><a href="Cart.dc.html" style="color:#F3E6C8">Cart</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#FFC527;margin:0 0 14px">Policies</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:9px;font-size:14px">
+          <li><a href="https://www.indianhoneypark.com/cancellation-and-refund-policy" style="color:#F3E6C8">Cancellation &amp; Refund</a></li>
+          <li><a href="https://www.indianhoneypark.com/shipping-and-delivery-policy" style="color:#F3E6C8">Shipping &amp; Delivery</a></li>
+          <li><a href="https://www.indianhoneypark.com/terms-and-conditions" style="color:#F3E6C8">Terms &amp; Conditions</a></li>
+          <li><a href="https://www.indianhoneypark.com/privacy-policy" style="color:#F3E6C8">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 style="font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:#FFC527;margin:0 0 14px">Contact</h4>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:9px;font-size:14px">
+          <li><a href="tel:+919400222600" style="color:#F3E6C8">+91 9400 222 600</a></li>
+          <li><a href="mailto:indianhoneypark90@gmail.com" style="color:#F3E6C8">indianhoneypark90@gmail.com</a></li>
+          <li style="display:flex;gap:14px;margin-top:6px"><a href="#contact" style="color:#FFC527">Instagram</a><a href="#contact" style="color:#FFC527">Facebook</a><a href="#contact" style="color:#FFC527">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div style="max-width:1180px;margin:38px auto 0;padding-top:18px;border-top:1px solid rgba(255,197,39,.25);font-size:13px;color:#9C8558">Copyright © Indian Honey Park</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showPromos&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Homepage&quot;}}">
+class Component extends DCLogic {
+  state = { cart: 0, scrolled: false, menuOpen: false };
+  componentDidMount() {
+    this._onScroll = () => {
+      const s = window.scrollY > 60;
+      if (s !== this.state.scrolled) this.setState({ scrolled: s });
+    };
+    window.addEventListener("scroll", this._onScroll, { passive: true });
+    this._onScroll();
+    try {
+      const r = JSON.parse(localStorage.getItem("ihp_cart") || "[]");
+      if (Array.isArray(r)) this.setState({ cart: r.reduce((n, l) => n + l.qty, 0) });
+    } catch (e) {}
+    this._initHeroJar();
+    requestAnimationFrame(() => this._initReveal());
+    this._initCountUp();
+  }
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this._onScroll);
+    window.removeEventListener("scroll", this._onHeroJarScroll);
+    if (this._revealObserver) this._revealObserver.disconnect();
+    if (this._countObserver) this._countObserver.disconnect();
+  }
+  _initCountUp() {
+    this._countObserver = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        const numEl = el.querySelector(".count-num");
+        const target = parseFloat(el.getAttribute("data-count-to"));
+        const suffix = el.getAttribute("data-count-suffix") || "";
+        const decimals = parseInt(el.getAttribute("data-count-decimals") || "0", 10);
+        const duration = 1000;
+        const start = performance.now();
+        const tick = (now) => {
+          const p = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          const val = target * eased;
+          numEl.textContent = val.toFixed(decimals) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+        this._countObserver.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll("[data-count-to]").forEach((el) => this._countObserver.observe(el));
+  }
+  _initReveal() {
+    if (this._revealObserver) this._revealObserver.disconnect();
+    this._revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        const parent = el.parentElement;
+        const group = parent ? Array.from(parent.children).filter((c) => c.classList.contains("reveal") || c.classList.contains("reveal-left") || c.classList.contains("reveal-right")) : [el];
+        const idx = Math.max(0, group.indexOf(el));
+        el.style.transitionDelay = Math.min(idx, 8) * 70 + "ms";
+        el.classList.add("is-in");
+        this._revealObserver.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
+    document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach((el) => this._revealObserver.observe(el));
+  }
+  _bumpCartBadge() {
+    const el = document.querySelector("[data-cart-badge]");
+    if (!el) return;
+    el.classList.remove("bump");
+    void el.offsetWidth;
+    el.classList.add("bump");
+  }
+  _initHeroJar() {
+    const img = document.getElementById("heroJarImg");
+    if (!img) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => img.classList.add("is-in")));
+    this._onHeroJarScroll = () => {
+      const y = Math.min(50, window.scrollY * 0.12);
+      const scale = 1 + Math.min(0.05, window.scrollY * 0.00015);
+      img.style.transform = "translateY(" + (-y) + "px) scale(" + scale + ") rotate(0deg)";
+    };
+    window.addEventListener("scroll", this._onHeroJarScroll, { passive: true });
+  }
+  renderVals() {
+    const img = (id) => "https://www.indianhoneypark.com/web/image/product.product/" + id + "/image_1024";
+    return {
+      cartCount: this.state.cart,
+      menuOpenClass: this.state.menuOpen ? "open" : "",
+      menuIcon: this.state.menuOpen ? "✕" : "☰",
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      headerBg: this.state.scrolled ? "rgba(255,253,246,.92)" : "rgba(255,253,246,.14)",
+      headerShadow: this.state.scrolled ? "0 14px 40px -20px rgba(80,52,0,.5)" : "none",
+      showPromos: this.props.showPromos ?? true,
+      addToCart: (e) => {
+        const id = Number(e.currentTarget.getAttribute("data-id"));
+        let cart = [];
+        try { const r = JSON.parse(localStorage.getItem("ihp_cart") || "[]"); if (Array.isArray(r)) cart = r; } catch (err) {}
+        const line = cart.find(l => l.id === id);
+        if (line) line.qty += 1; else cart.push({ id, qty: 1 });
+        try { localStorage.setItem("ihp_cart", JSON.stringify(cart)); } catch (err) {}
+        this.setState({ cart: cart.reduce((n, l) => n + l.qty, 0) });
+        this._bumpCartBadge();
+      },
+      categories: [
+        { mark: "◍", name: "Natural Honey", blurb: "Wild forest, Kashmir and acacia — raw and unfiltered." },
+        { mark: "◈", name: "Fruits in Honey", blurb: "Whole fruit preserved in golden honey, nothing else." },
+        { mark: "✦", name: "Flavored Honey", blurb: "Garlic, ginger and spice infusions for daily immunity." },
+        { mark: "❋", name: "Cheruthen", blurb: "Rare stingless bee honey, harvested in small lots." }
+      ],
+      products: [
+        { id: 3, name: "Indian Honey 1 Kg", cat: "Honey", price: "₹440", tag: "BEST SELLER", img: img(3) },
+        { id: 11, name: "Wild Forest Honey", cat: "Honey", price: "₹930", tag: "PREMIUM", img: img(11) },
+        { id: 7, name: "Acacia Honey 250 gm", cat: "Honey", price: "₹320", tag: "RAW", img: img(7) },
+        { id: 12, name: "Kashmir Honey", cat: "Honey", price: "₹200", tag: "NEW", img: img(12) },
+        { id: 16, name: "Kiwi in Honey 200 gm", cat: "Fruits in Honey", price: "₹200", tag: "NEW", img: img(16) },
+        { id: 10, name: "Garlic in Honey 200 gm", cat: "Flavored Honey", price: "₹200", tag: "IMMUNITY", img: img(10) },
+        { id: 9, name: "Strawberry in Honey 250 gm", cat: "Fruits in Honey", price: "₹210", tag: "POPULAR", img: img(9) },
+        { id: 8, name: "Rambutan in Honey 250 gm", cat: "Fruits in Honey", price: "₹220", tag: "LIMITED", img: img(8) }
+      ],
+      reviews: [
+        { quote: "The wild forest honey tastes nothing like supermarket honey — thick, floral and slightly smoky. Third order already.", initial: "A", name: "Anjali Menon", city: "Kochi" },
+        { quote: "Bought the garlic in honey for my parents through winter. They swear by a spoon every morning now.", initial: "R", name: "Rahul Sharma", city: "Bengaluru" },
+        { quote: "Packaging arrived sealed and spotless, and the kiwi jars actually have whole fruit inside. Genuine product.", initial: "S", name: "Sneha Pillai", city: "Thrissur" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
